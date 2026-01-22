@@ -73,7 +73,7 @@ export default function AuditPage() {
             "Vị trí": session.location,
             "Trạng thái": session.status,
         }));
-        exportToExcel(exportData, \`Ky_kiem_ke_\${new Date().toISOString().slice(0, 10)}\`, "Kiểm kê");
+        exportToExcel(exportData, `Ky_kiem_ke_${new Date().toISOString().slice(0, 10)}`, "Kiểm kê");
     };
 
     const columns: ColumnDef<any>[] = [
@@ -112,7 +112,7 @@ export default function AuditPage() {
             cell: ({ row }) => (
                 <div className="flex items-center gap-1">
                     <Button size="sm" variant="ghost" asChild>
-                        <Link href={\`/dashboard/assets/audit/\${row.original.id}\`}>
+                        <Link href={`/dashboard/assets/audit/${row.original.id}`}>
                             <Play className="mr-1 h-3 w-3" /> Thực hiện
                         </Link>
                     </Button>

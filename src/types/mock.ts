@@ -72,7 +72,7 @@ export interface AuditSession {
     code: string;
     name: string;
     date: string;
-    status: "PENDING" | "COMPLETED";
+    status: "PENDING" | "COMPLETED" | "LOCKED" | "IN_PROGRESS";
     location: string;
     notes?: string;
 }
