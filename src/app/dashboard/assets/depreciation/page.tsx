@@ -101,7 +101,7 @@ export default function DepreciationPage() {
         {
             accessorKey: "yearsUsed",
             header: "Năm SD",
-            cell: ({ row }) => \`\${row.original.yearsUsed} năm\`,
+            cell: ({ row }) => `${row.original.yearsUsed} năm`,
         },
         {
             accessorKey: "monthlyDepreciation",
@@ -170,15 +170,15 @@ export default function DepreciationPage() {
             "Đã khấu hao": a.depreciatedAmount,
             "Giá trị còn lại": a.currentValue,
         }));
-        exportToExcel(exportData, \`Khau_hao_tai_san_\${new Date().toISOString().slice(0, 10)}\`, "Khấu hao");
+        exportToExcel(exportData, `Khau_hao_tai_san_${new Date().toISOString().slice(0, 10)}`, "Khấu hao");
     };
 
     const handleExportPeriod = (period: DepreciationPeriod) => {
         const exportData = [
             {
                 "Mã kỳ": period.periodCode,
-                "Tháng": period.month,
-                "Năm": period.year,
+                Tháng: period.month,
+                Năm: period.year,
                 "Tổng khấu hao": period.totalDepreciation,
                 "Số tài sản": period.assetCount,
                 "Trạng thái": period.status,
@@ -186,14 +186,14 @@ export default function DepreciationPage() {
                 "Ngày duyệt": period.approvedDate || "",
             },
         ];
-        exportToExcel(exportData, \`Ky_khau_hao_\${period.periodCode}\`, "Kỳ khấu hao");
+        exportToExcel(exportData, `Ky_khau_hao_${period.periodCode}`, "Kỳ khấu hao");
     };
 
     const handleCreatePeriod = () => {
         const now = new Date();
         const newPeriod: DepreciationPeriod = {
-            id: \`dep-\${Date.now()}\`,
-            periodCode: \`DEP-\${now.getFullYear()}-\${String(now.getMonth() + 1).padStart(2, "0")}\`,
+            id: `dep-${Date.now()}`,
+            periodCode: `DEP-${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`,
             month: String(now.getMonth() + 1).padStart(2, "0"),
             year: String(now.getFullYear()),
             status: "DRAFT",
