@@ -4,11 +4,12 @@ import { useState } from "react";
 import { DataTable } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Edit, Trash2 } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Download } from "lucide-react";
 import { ColumnDef } from "@tanstack/react-table";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { exportToExcel } from "@/lib/exportUtils";
 
 interface CategoryPageProps<T> {
     title: string;
@@ -19,6 +20,7 @@ interface CategoryPageProps<T> {
     columns: ColumnDef<T>[];
     renderForm: (formData: Partial<T>, setFormData: (data: Partial<T>) => void) => React.ReactNode;
     initialFormData: Partial<T>;
+    exportFormatter?: (data: T[]) => any[];
 }
 
 export function CategoryManagementPage<T extends { id: string; name: string }>({
@@ -30,6 +32,7 @@ export function CategoryManagementPage<T extends { id: string; name: string }>({
     columns,
     renderForm,
     initialFormData,
+    exportFormatter,
 }: CategoryPageProps<T>) {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingId, setEditingId] = useState<string | null>(null);
@@ -67,6 +70,11 @@ export function CategoryManagementPage<T extends { id: string; name: string }>({
         setEditingId(null);
     };
 
+    const handleExportExcel = () => {
+        const dataToExport = exportFormatter ? exportFormatter(filteredData) : filteredData;
+        exportToExcel(dataToExport, `${title}_${new Date().toISOString().slice(0, 10)}`, title);
+    };
+
     const actionColumn: ColumnDef<T> = {
         id: "actions",
         cell: ({ row }) => {
@@ -88,14 +96,19 @@ export function CategoryManagementPage<T extends { id: string; name: string }>({
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold tracking-tight">{title}</h1>
-                <Button
-                    onClick={() => {
-                        resetForm();
-                        setIsDialogOpen(true);
-                    }}
-                >
-                    <Plus className="mr-2 h-4 w-4" /> Thêm mới
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" onClick={handleExportExcel}>
+                        <Download className="mr-2 h-4 w-4" /> Xuất Excel
+                    </Button>
+                    <Button
+                        onClick={() => {
+                            resetForm();
+                            setIsDialogOpen(true);
+                        }}
+                    >
+                        <Plus className="mr-2 h-4 w-4" /> Thêm mới
+                    </Button>
+                </div>
             </div>
 
             <div className="flex items-center space-x-2">

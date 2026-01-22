@@ -114,3 +114,19 @@ export interface Permission {
 }
 
 export type RolePermissions = Record<Role, string[]>;
+
+export interface SystemSettings {
+    companyName: string;
+    emailNotifications: boolean;
+    smsNotifications: boolean;
+    dateFormat: string;
+    maintenanceAlertDays: number;
+}
+
+export interface SystemSettings {
+    companyName: string;
+    emailNotifications: boolean;
+    smsNotifications: boolean;
+    dateFormat: string;
+    maintenanceAlertDays: number;
+}

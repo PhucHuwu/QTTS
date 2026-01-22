@@ -56,7 +56,18 @@ const data = {
                 { title: "Người dùng", url: "/dashboard/admin/users" },
                 { title: "Phân quyền", url: "/dashboard/admin/roles" },
                 { title: "Nhật ký hệ thống", url: "/dashboard/admin/logs" },
+                { title: "Cài đặt tham số", url: "/dashboard/admin/settings" },
             ],
+        },
+        {
+            title: "Quản lý vật tư (Module B)",
+            url: "/dashboard/inventory",
+            icon: Box,
+        },
+        {
+            title: "Quản lý tòa nhà (Module C)",
+            url: "/dashboard/building",
+            icon: FileText,
         },
         {
             title: "Quản lý tài sản",

@@ -6,6 +6,7 @@ import { AssetCategory } from "@/types/mock";
 import { ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatCategoriesForExport } from "@/lib/exportUtils";
 
 export default function AssetTypesPage() {
     const data = useAppStore((state) => state.categories);
@@ -29,6 +30,7 @@ export default function AssetTypesPage() {
             onDelete={remove}
             columns={columns}
             initialFormData={{ name: "", code: "" }}
+            exportFormatter={formatCategoriesForExport}
             renderForm={(formData, setFormData) => (
                 <>
                     <div className="grid gap-2">

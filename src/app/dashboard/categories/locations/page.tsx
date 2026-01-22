@@ -6,6 +6,7 @@ import { Location } from "@/types/mock";
 import { ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatLocationsForExport } from "@/lib/exportUtils";
 
 export default function LocationsPage() {
     const data = useAppStore((state) => state.locations);
@@ -28,6 +29,7 @@ export default function LocationsPage() {
             onDelete={remove}
             columns={columns}
             initialFormData={{ name: "", code: "" }}
+            exportFormatter={formatLocationsForExport}
             renderForm={(formData, setFormData) => (
                 <>
                     <div className="grid gap-2">

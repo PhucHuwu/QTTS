@@ -12,6 +12,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { Download } from "lucide-react";
+import { exportToExcel } from "@/lib/exportUtils";
 
 export default function MaintenancePage() {
     const assets = useAppStore((state) => state.assets);
@@ -53,6 +55,18 @@ export default function MaintenancePage() {
         }
     };
 
+    const handleExport = () => {
+        const exportData = enrichedData.map((ticket) => ({
+            "Mã phiếu": ticket.id,
+            "Mã tài sản": ticket.assetCode,
+            "Tên tài sản": ticket.assetName,
+            "Ngày yêu cầu": ticket.requestDate,
+            "Mô tả": ticket.description,
+            "Trạng thái": ticket.status,
+        }));
+        exportToExcel(exportData, `Phieu_bao_tri_${new Date().toISOString().slice(0, 10)}`, "Bảo trì");
+    };
+
     // Enrich ticket data with asset info
     const enrichedData = activeTickets.map((ticket) => {
         const asset = assets.find((a) => a.id === ticket.assetId);
@@ -83,49 +97,55 @@ export default function MaintenancePage() {
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold tracking-tight">Bảo trì & Sửa chữa</h1>
-                <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-                    <DialogTrigger asChild>
-                        <Button>
-                            <Plus className="mr-2 h-4 w-4" /> Tạo phiếu bảo trì
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Tạo phiếu bảo trì / báo hỏng</DialogTitle>
-                            <DialogDescription>Chọn tài sản và mô tả sự cố để tạo phiếu xử lý.</DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4 py-2">
-                            <div className="space-y-2">
-                                <Label>Chọn tài sản</Label>
-                                <Select value={selectedAssetId} onValueChange={setSelectedAssetId}>
-                                    <SelectTrigger>
-                                        <SelectValue placeholder="Tìm tài sản..." />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {availableAssets.map((a) => (
-                                            <SelectItem key={a.id} value={a.id}>
-                                                {a.code} - {a.name}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="space-y-2">
-                                <Label>Mô tả sự cố / Yêu cầu</Label>
-                                <Textarea
-                                    placeholder="Ví dụ: Máy không lên nguồn, kẹt giấy..."
-                                    value={description}
-                                    onChange={(e) => setDescription(e.target.value)}
-                                />
-                            </div>
-                        </div>
-                        <DialogFooter>
-                            <Button onClick={handleCreate} disabled={!selectedAssetId || !description}>
-                                Tạo phiếu
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" onClick={handleExport}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Xuất Excel
+                    </Button>
+                    <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                        <DialogTrigger asChild>
+                            <Button>
+                                <Plus className="mr-2 h-4 w-4" /> Tạo phiếu bảo trì
                             </Button>
-                        </DialogFooter>
-                    </DialogContent>
-                </Dialog>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Tạo phiếu bảo trì / báo hỏng</DialogTitle>
+                                <DialogDescription>Chọn tài sản và mô tả sự cố để tạo phiếu xử lý.</DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4 py-2">
+                                <div className="space-y-2">
+                                    <Label>Chọn tài sản</Label>
+                                    <Select value={selectedAssetId} onValueChange={setSelectedAssetId}>
+                                        <SelectTrigger>
+                                            <SelectValue placeholder="Tìm tài sản..." />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            {availableAssets.map((a) => (
+                                                <SelectItem key={a.id} value={a.id}>
+                                                    {a.code} - {a.name}
+                                                </SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label>Mô tả sự cố / Yêu cầu</Label>
+                                    <Textarea
+                                        placeholder="Ví dụ: Máy không lên nguồn, kẹt giấy..."
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                </div>
+                            </div>
+                            <DialogFooter>
+                                <Button onClick={handleCreate} disabled={!selectedAssetId || !description}>
+                                    Tạo phiếu
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                </div>
             </div>
 
             <div className="rounded-md border p-4 bg-muted/20">

@@ -13,8 +13,17 @@ import {
     SystemLog,
     RolePermissions,
     Role,
+    SystemSettings,
 } from "@/types/mock";
 import { MOCK_USERS, MOCK_ASSETS, MOCK_CATEGORIES, MOCK_SUPPLIERS, MOCK_LOCATIONS } from "@/mocks/data";
+
+const DEFAULT_SETTINGS: SystemSettings = {
+    companyName: "QTTS Demo Company",
+    emailNotifications: true,
+    smsNotifications: false,
+    dateFormat: "dd/MM/yyyy",
+    maintenanceAlertDays: 7,
+};
 
 export interface AppState {
     currentUser: User | null;
@@ -33,6 +42,7 @@ export interface AppState {
     masterData: MasterData[];
     systemLogs: SystemLog[];
     rolePermissions: RolePermissions;
+    systemSettings: SystemSettings;
 
     // Actions
     login: (email: string) => boolean;
@@ -56,6 +66,7 @@ export interface AppState {
     deleteMasterData: (id: string) => void;
     addSystemLog: (log: Omit<SystemLog, "id" | "timestamp">) => void;
     updateRolePermissions: (role: Role, permissions: string[]) => void;
+    updateSystemSettings: (settings: Partial<SystemSettings>) => void;
 
     // Category Actions
     addCategory: (item: AssetCategory) => void;
@@ -100,6 +111,7 @@ export const useAppStore = create<AppState>()(
                 WAREHOUSE_KEEPER: ["ASSET_READ", "ASSET_WRITE", "INVENTORY_READ", "INVENTORY_WRITE"],
                 USER: ["ASSET_READ", "PROFILE_READ"],
             },
+            systemSettings: DEFAULT_SETTINGS,
 
             login: (email: string) => {
                 const user = get().users.find((u) => u.email === email);
@@ -198,6 +210,11 @@ export const useAppStore = create<AppState>()(
                     rolePermissions: { ...state.rolePermissions, [role]: permissions },
                 })),
 
+            updateSystemSettings: (settings) =>
+                set((state) => ({
+                    systemSettings: { ...state.systemSettings, ...settings },
+                })),
+
             // Category Actions
             addCategory: (item) => set((state) => ({ categories: [...state.categories, item] })),
             updateCategory: (id, updates) =>
@@ -244,6 +261,7 @@ export const useAppStore = create<AppState>()(
                 masterData: state.masterData,
                 systemLogs: state.systemLogs,
                 rolePermissions: state.rolePermissions,
+                systemSettings: state.systemSettings,
             }),
         },
     ),

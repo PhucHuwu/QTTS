@@ -6,6 +6,7 @@ import { Supplier } from "@/types/mock";
 import { ColumnDef } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { formatSuppliersForExport } from "@/lib/exportUtils";
 
 export default function SuppliersPage() {
     const data = useAppStore((state) => state.suppliers);
@@ -29,6 +30,7 @@ export default function SuppliersPage() {
             onDelete={remove}
             columns={columns}
             initialFormData={{ name: "", code: "" }}
+            exportFormatter={formatSuppliersForExport}
             renderForm={(formData, setFormData) => (
                 <>
                     <div className="grid gap-2">
