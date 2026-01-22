@@ -114,7 +114,7 @@ export default function ExportedAssetsPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Tìm kiếm và Lọc (UC-A27)</CardTitle>
+                    <CardTitle>Tìm kiếm và Lọc</CardTitle>
                     <CardDescription>Tìm kiếm tài sản đã xuất toán</CardDescription>
                 </CardHeader>
                 <CardContent>

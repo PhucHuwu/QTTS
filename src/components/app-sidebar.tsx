@@ -63,7 +63,7 @@ const data = {
             ],
         },
         {
-            title: "Quản lý vật tư (Module B)",
+            title: "Quản lý vật tư",
             url: "/dashboard/inventory",
             icon: Box,
             items: [
@@ -76,7 +76,7 @@ const data = {
             ],
         },
         {
-            title: "Quản lý tòa nhà (Module C)",
+            title: "Quản lý tòa nhà",
             url: "/dashboard/building",
             icon: Building2,
             items: [

@@ -89,28 +89,28 @@ export default function InventoryPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle>Thông tin Module B</CardTitle>
+                    <CardTitle>Thông tin Quản lý vật tư</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4 md:grid-cols-2">
                         <div>
                             <h4 className="font-medium mb-2">Tính năng đã triển khai:</h4>
                             <ul className="list-disc pl-5 space-y-1 text-sm">
-                                <li>Danh mục vật tư và kho bãi (UC-B01, B02)</li>
-                                <li>Theo dõi tồn kho toàn hàng (UC-B03-B08)</li>
-                                <li>Nhập kho theo lô với Import (UC-B09-B15)</li>
-                                <li>Xuất kho theo lô với Phê duyệt (UC-B18-B24)</li>
-                                <li>Kiểm kê vật tư định kỳ (UC-B33-B39)</li>
+                                <li>Danh mục vật tư và kho bãi</li>
+                                <li>Theo dõi tồn kho toàn hàng</li>
+                                <li>Nhập kho theo lô với Import</li>
+                                <li>Xuất kho theo lô với Phê duyệt</li>
+                                <li>Kiểm kê vật tư định kỳ</li>
                             </ul>
                         </div>
                         <div>
                             <h4 className="font-medium mb-2">Tính năng sắp triển khai:</h4>
                             <ul className="list-disc pl-5 space-y-1 text-sm">
-                                <li>Điều chuyển vật tư giữa các kho (UC-B28-B32)</li>
-                                <li>Thanh lý và tiêu hủy vật tư (UC-B48-B59)</li>
-                                <li>Quyết toán vật tư (UC-B60-B63)</li>
-                                <li>Báo cáo chi tiết (UC-B64)</li>
-                                <li>Tích hợp hệ thống Core (UC-B65-B69)</li>
+                                <li>Điều chuyển vật tư giữa các kho</li>
+                                <li>Thanh lý và tiêu hủy vật tư</li>
+                                <li>Quyết toán vật tư</li>
+                                <li>Báo cáo chi tiết</li>
+                                <li>Tích hợp hệ thống Core</li>
                             </ul>
                         </div>
                     </div>

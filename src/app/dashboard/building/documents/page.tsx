@@ -337,7 +337,7 @@ export default function BuildingDocumentsPage() {
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold">Quản lý hồ sơ & hợp đồng tòa nhà</h1>
-                <p className="text-muted-foreground">Quản lý hồ sơ pháp lý, thiết bị, hợp đồng dịch vụ, bảo hiểm và chi phí vận hành (UC-C01-C07)</p>
+                <p className="text-muted-foreground">Quản lý hồ sơ pháp lý, thiết bị, hợp đồng dịch vụ, bảo hiểm và chi phí vận hành</p>
             </div>
 
             {/* Statistics Cards */}

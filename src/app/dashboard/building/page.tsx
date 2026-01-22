@@ -49,7 +49,7 @@ export default function BuildingPage() {
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold">Quản lý vận hành tòa nhà</h1>
-                <p className="text-muted-foreground">Hệ thống quản lý tòa nhà toàn diện (Module C - UC-C01 đến UC-C17)</p>
+                <p className="text-muted-foreground">Hệ thống quản lý tòa nhà toàn diện</p>
             </div>
 
             {/* Statistics */}
@@ -100,12 +100,12 @@ export default function BuildingPage() {
             {/* Module Info */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Về Module C: Quản lý vận hành tòa nhà</CardTitle>
+                    <CardTitle>Về Quản lý vận hành tòa nhà</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4 md:grid-cols-2">
                         <div>
-                            <h4 className="font-medium mb-2">Quản trị & Vận hành (UC-C01 đến UC-C07)</h4>
+                            <h4 className="font-medium mb-2">Quản trị & Vận hành</h4>
                             <ul className="text-sm text-muted-foreground space-y-1">
                                 <li>• Quản lý hồ sơ pháp lý, thiết kế</li>
                                 <li>• Quản lý thiết bị tòa nhà</li>
@@ -116,7 +116,7 @@ export default function BuildingPage() {
                             </ul>
                         </div>
                         <div>
-                            <h4 className="font-medium mb-2">Khách thuê & Báo cáo (UC-C08 đến UC-C17)</h4>
+                            <h4 className="font-medium mb-2">Khách thuê & Báo cáo</h4>
                             <ul className="text-sm text-muted-foreground space-y-1">
                                 <li>• Quản lý khách thuê</li>
                                 <li>• Quản lý hợp đồng thuê</li>

@@ -282,7 +282,7 @@ export default function BuildingEquipmentPage() {
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold">Quản lý thiết bị & bảo trì</h1>
-                <p className="text-muted-foreground">Quản lý thiết bị tòa nhà và lập lịch bảo trì định kỳ (UC-C02, UC-C06)</p>
+                <p className="text-muted-foreground">Quản lý thiết bị tòa nhà và lập lịch bảo trì định kỳ</p>
             </div>
 
             {/* Statistics Cards */}

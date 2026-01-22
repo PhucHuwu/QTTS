@@ -357,7 +357,7 @@ export default function BuildingTenantsPage() {
         <div className="space-y-6">
             <div>
                 <h1 className="text-3xl font-bold">Quản lý khách thuê</h1>
-                <p className="text-muted-foreground">Quản lý khách thuê, hợp đồng, thanh toán và công nợ (UC-C08-C10)</p>
+                <p className="text-muted-foreground">Quản lý khách thuê, hợp đồng, thanh toán và công nợ</p>
             </div>
 
             {/* Statistics Cards */}

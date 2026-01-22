@@ -436,7 +436,7 @@ export default function BuildingReportsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Báo cáo doanh thu (UC-C11)</CardTitle>
+                                    <CardTitle>Báo cáo doanh thu</CardTitle>
                                     <CardDescription>Chi tiết doanh thu theo từng nguồn</CardDescription>
                                 </div>
                                 <Button variant="outline" onClick={() => exportToExcel(mockRevenue, "bao-cao-doanh-thu")}>
@@ -456,7 +456,7 @@ export default function BuildingReportsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Báo cáo chi phí (UC-C12)</CardTitle>
+                                    <CardTitle>Báo cáo chi phí</CardTitle>
                                     <CardDescription>Chi tiết chi phí vận hành theo loại</CardDescription>
                                 </div>
                                 <Button variant="outline" onClick={() => exportToExcel(mockExpenses, "bao-cao-chi-phi")}>
@@ -476,7 +476,7 @@ export default function BuildingReportsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>So sánh doanh thu & chi phí (UC-C16)</CardTitle>
+                                    <CardTitle>So sánh doanh thu & chi phí</CardTitle>
                                     <CardDescription>Phân tích lợi nhuận theo kỳ</CardDescription>
                                 </div>
                                 <Button variant="outline">
@@ -527,7 +527,7 @@ export default function BuildingReportsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Danh sách khách thuê (UC-C13)</CardTitle>
+                                    <CardTitle>Danh sách khách thuê</CardTitle>
                                     <CardDescription>Thông tin chi tiết khách thuê và hợp đồng</CardDescription>
                                 </div>
                                 <Button variant="outline" onClick={() => exportToExcel(mockTenantReport, "danh-sach-khach-thue")}>
@@ -547,7 +547,7 @@ export default function BuildingReportsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Báo cáo công nợ (UC-C14)</CardTitle>
+                                    <CardTitle>Báo cáo công nợ</CardTitle>
                                     <CardDescription>Theo dõi công nợ khách hàng</CardDescription>
                                 </div>
                                 <Button variant="outline" onClick={() => exportToExcel(mockDebtReport, "bao-cao-cong-no")}>
@@ -567,7 +567,7 @@ export default function BuildingReportsPage() {
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <div>
-                                    <CardTitle>Báo cáo bảo trì (UC-C15)</CardTitle>
+                                    <CardTitle>Báo cáo bảo trì</CardTitle>
                                     <CardDescription>Thống kê chi phí và tần suất bảo trì thiết bị</CardDescription>
                                 </div>
                                 <Button variant="outline" onClick={() => exportToExcel(mockMaintenanceReport, "bao-cao-bao-tri")}>
