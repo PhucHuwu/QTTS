@@ -1,46 +1,73 @@
 "use client";
 
+import { use } from "react";
 import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { useAppStore } from "@/lib/store";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, Save } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ArrowLeft, Download, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { exportToExcel } from "@/lib/exportUtils";
 
-export default function AuditExecutionPage() {
-    const router = useRouter();
-    const { id } = useParams();
+export default function AuditDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const resolvedParams = use(params);
     const assets = useAppStore((state) => state.assets);
+    const auditSessions = useAppStore((state) => state.auditSessions);
+    const session = auditSessions.find((s) => s.id === resolvedParams.id);
 
-    // Mock checking state: { assetId: { status, note } }
-    const [auditData, setAuditData] = useState<Record<string, any>>({});
+    const [checkedAssets, setCheckedAssets] = useState<string[]>([]);
 
-    const handleStatusChange = (assetId: string, status: string) => {
-        setAuditData((prev) => ({
-            ...prev,
-            [assetId]: { ...prev[assetId], status },
-        }));
+    if (!session) {
+        return <div className="p-8 text-center">Không tìm thấy kỳ kiểm kê</div>;
+    }
+
+    // Filter assets by location for this audit
+    const relevantAssets = assets.filter((a) => a.location === session.location);
+
+    const toggleAsset = (id: string) => {
+        if (checkedAssets.includes(id)) {
+            setCheckedAssets(checkedAssets.filter((x) => x !== id));
+        } else {
+            setCheckedAssets([...checkedAssets, id]);
+        }
     };
 
-    const handleNoteChange = (assetId: string, note: string) => {
-        setAuditData((prev) => ({
-            ...prev,
-            [assetId]: { ...prev[assetId], note },
-        }));
+    const toggleAll = () => {
+        if (checkedAssets.length === relevantAssets.length) {
+            setCheckedAssets([]);
+        } else {
+            setCheckedAssets(relevantAssets.map((a) => a.id));
+        }
     };
 
-    const handleFinish = () => {
-        alert("Đã hoàn thành kiểm kê! Cập nhật trạng thái tài sản thành công.");
-        router.push("/dashboard/assets/audit");
+    const handleComplete = () => {
+        if (checkedAssets.length === 0) {
+            alert("Vui lòng kiểm tra ít nhất một tài sản!");
+            return;
+        }
+        if (confirm(`Xác nhận hoàn thành kiểm kê ${checkedAssets.length}/${relevantAssets.length} tài sản?`)) {
+            alert("Đã lưu kết quả kiểm kê!");
+        }
+    };
+
+    const handleExport = () => {
+        const exportData = relevantAssets.map((asset) => ({
+            "Mã TS": asset.code,
+            "Tên tài sản": asset.name,
+            "Trạng thái": asset.status,
+            "Vị trí": asset.location,
+            "Giá trị": asset.price,
+            "Đã kiểm tra": checkedAssets.includes(asset.id) ? "Có" : "Chưa",
+        }));
+        exportToExcel(exportData, `Kiem_ke_${session.code}_${new Date().toISOString().slice(0, 10)}`, "Kiểm kê");
     };
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center gap-4 justify-between">
+            <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <Button variant="ghost" size="icon" asChild>
                         <Link href="/dashboard/assets/audit">
@@ -48,59 +75,79 @@ export default function AuditExecutionPage() {
                         </Link>
                     </Button>
                     <div>
-                        <h1 className="text-xl font-bold">Thực hiện kiểm kê</h1>
-                        <p className="text-sm text-muted-foreground">Mã đợt: KK-{id} - Phạm vi: Toàn bộ</p>
+                        <h1 className="text-2xl font-bold tracking-tight">{session.name}</h1>
+                        <div className="text-sm text-muted-foreground flex items-center gap-2">
+                            Mã: {session.code} · Vị trí: {session.location}
+                        </div>
                     </div>
                 </div>
-                <Button onClick={handleFinish} className="bg-green-600 hover:bg-green-700">
-                    <Save className="mr-2 h-4 w-4" /> Hoàn tất & Chốt số liệu
-                </Button>
+                <div className="flex items-center gap-2">
+                    <Button variant="outline" onClick={handleExport}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Xuất Excel
+                    </Button>
+                </div>
             </div>
 
-            <div className="border rounded-md">
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Mã TS</TableHead>
-                            <TableHead>Tên tài sản</TableHead>
-                            <TableHead>Hiện trạng (Hệ thống)</TableHead>
-                            <TableHead className="w-[200px]">Đánh giá thực tế</TableHead>
-                            <TableHead>Ghi chú / Chênh lệch</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {assets.map((asset) => (
-                            <TableRow key={asset.id}>
-                                <TableCell className="font-medium">{asset.code}</TableCell>
-                                <TableCell>{asset.name}</TableCell>
-                                <TableCell>
-                                    <Badge variant="outline">{asset.status}</Badge>
-                                </TableCell>
-                                <TableCell>
-                                    <Select value={auditData[asset.id]?.status || "OK"} onValueChange={(v) => handleStatusChange(asset.id, v)}>
-                                        <SelectTrigger>
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="OK">Khớp / Bình thường</SelectItem>
-                                            <SelectItem value="WRONG_LOCATION">Sai vị trí</SelectItem>
-                                            <SelectItem value="QLY_DOWN">Kém phẩm chất</SelectItem>
-                                            <SelectItem value="MISSING">Thất lạc</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </TableCell>
-                                <TableCell>
-                                    <Input
-                                        placeholder="Ghi chú..."
-                                        value={auditData[asset.id]?.note || ""}
-                                        onChange={(e) => handleNoteChange(asset.id, e.target.value)}
-                                    />
-                                </TableCell>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Tiến độ kiểm kê</CardTitle>
+                    <CardDescription>
+                        Đã kiểm tra: {checkedAssets.length}/{relevantAssets.length} tài sản
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center gap-4">
+                        <div className="flex-1 bg-muted rounded-full h-4">
+                            <div
+                                className="bg-primary h-4 rounded-full transition-all"
+                                style={{ width: `${(checkedAssets.length / relevantAssets.length) * 100}%` }}
+                            />
+                        </div>
+                        <div className="text-sm font-medium">{((checkedAssets.length / relevantAssets.length) * 100).toFixed(0)}%</div>
+                    </div>
+                    <Button onClick={handleComplete} disabled={checkedAssets.length === 0} className="w-full mt-4">
+                        <CheckCircle2 className="mr-2 h-4 w-4" />
+                        Xác nhận kiểm kê ({checkedAssets.length} tài sản)
+                    </Button>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Danh sách tài sản cần kiểm kê</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-12">
+                                    <Checkbox checked={checkedAssets.length === relevantAssets.length} onCheckedChange={toggleAll} />
+                                </TableHead>
+                                <TableHead>Mã TS</TableHead>
+                                <TableHead>Tên tài sản</TableHead>
+                                <TableHead>Trạng thái</TableHead>
+                                <TableHead>Giá trị</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </div>
+                        </TableHeader>
+                        <TableBody>
+                            {relevantAssets.map((asset) => (
+                                <TableRow key={asset.id}>
+                                    <TableCell>
+                                        <Checkbox checked={checkedAssets.includes(asset.id)} onCheckedChange={() => toggleAsset(asset.id)} />
+                                    </TableCell>
+                                    <TableCell className="font-medium">{asset.code}</TableCell>
+                                    <TableCell>{asset.name}</TableCell>
+                                    <TableCell>
+                                        <Badge variant={asset.status === "ACTIVE" ? "default" : "secondary"}>{asset.status}</Badge>
+                                    </TableCell>
+                                    <TableCell>{new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(asset.price)}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
         </div>
     );
 }
