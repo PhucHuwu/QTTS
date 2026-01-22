@@ -25,8 +25,8 @@ export default function AuditPage() {
         if (!newAuditName) return;
 
         const newSession = {
-            id: \`au-\${Date.now()}\`,
-            code: \`KK-\${new Date().toISOString().slice(0, 7)}-\${Math.floor(Math.random() * 100)}\`,
+            id: `au-${Date.now()}`,
+            code: `KK-${new Date().toISOString().slice(0, 7)}-${Math.floor(Math.random() * 100)}`,
             name: newAuditName,
             date: new Date().toISOString().slice(0, 10),
             status: "PENDING" as const,
