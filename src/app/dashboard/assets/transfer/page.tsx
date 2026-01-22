@@ -8,9 +8,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ArrowLeft, ArrowRightLeft } from "lucide-react";
+import { ArrowLeft, ArrowRightLeft, Upload } from "lucide-react";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
+import { ImportDialog } from "@/components/import-dialog";
 
 export default function AssetTransferPage() {
     const router = useRouter();
@@ -26,6 +27,7 @@ export default function AssetTransferPage() {
     const [targetManager, setTargetManager] = useState("");
     const [transferDate, setTransferDate] = useState(new Date().toISOString().split("T")[0]);
     const [reason, setReason] = useState("");
+    const [showImportDialog, setShowImportDialog] = useState(false);
 
     const handleTransfer = () => {
         if (selectedAssetIds.length === 0 || !targetLocation || !targetManager) {
@@ -72,8 +74,23 @@ export default function AssetTransferPage() {
         }
     };
 
+    const handleImportComplete = (importedData: any[]) => {
+        // Extract asset IDs from imported data
+        const importedIds = importedData.map((item) => item.id);
+        setSelectedAssetIds([...selectedAssetIds, ...importedIds]);
+        alert(`Đã import thành công ${importedData.length} tài sản`);
+    };
+
     return (
         <div className="space-y-4 max-w-4xl mx-auto">
+            {showImportDialog && (
+                <ImportDialog
+                    open={showImportDialog}
+                    onOpenChange={setShowImportDialog}
+                    title="Import danh sách tài sản điều chuyển"
+                    onImportComplete={handleImportComplete}
+                />
+            )}
             <div className="flex items-center gap-4">
                 <Button variant="ghost" size="icon" asChild>
                     <Link href="/dashboard/assets">
@@ -86,8 +103,16 @@ export default function AssetTransferPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <Card className="md:col-span-1">
                     <CardHeader>
-                        <CardTitle>1. Chọn tài sản cần điều chuyển</CardTitle>
-                        <CardDescription>Tích chọn các tài sản từ danh sách bên dưới.</CardDescription>
+                        <div className="flex items-center justify-between">
+                            <div>
+                                <CardTitle>1. Chọn tài sản cần điều chuyển</CardTitle>
+                                <CardDescription>Tích chọn các tài sản từ danh sách bên dưới.</CardDescription>
+                            </div>
+                            <Button variant="outline" size="sm" onClick={() => setShowImportDialog(true)}>
+                                <Upload className="mr-2 h-4 w-4" />
+                                Import
+                            </Button>
+                        </div>
                     </CardHeader>
                     <CardContent className="h-[400px] overflow-auto border rounded-md p-0">
                         <div className="divide-y">

@@ -18,6 +18,8 @@ import {
     LayoutDashboard,
     Box,
     FileText,
+    Activity,
+    Building2,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -56,6 +58,7 @@ const data = {
                 { title: "Người dùng", url: "/dashboard/admin/users" },
                 { title: "Phân quyền", url: "/dashboard/admin/roles" },
                 { title: "Nhật ký hệ thống", url: "/dashboard/admin/logs" },
+                { title: "Tích hợp hệ thống", url: "/dashboard/admin/integrations" },
                 { title: "Cài đặt tham số", url: "/dashboard/admin/settings" },
             ],
         },
@@ -63,11 +66,26 @@ const data = {
             title: "Quản lý vật tư (Module B)",
             url: "/dashboard/inventory",
             icon: Box,
+            items: [
+                { title: "Tổng quan", url: "/dashboard/inventory" },
+                { title: "Danh mục VT & Kho", url: "/dashboard/inventory/categories" },
+                { title: "Theo dõi Tồn kho", url: "/dashboard/inventory/tracking" },
+                { title: "Nhập kho", url: "/dashboard/inventory/import" },
+                { title: "Xuất kho", url: "/dashboard/inventory/export" },
+                { title: "Kiểm kê", url: "/dashboard/inventory/audit" },
+            ],
         },
         {
             title: "Quản lý tòa nhà (Module C)",
             url: "/dashboard/building",
-            icon: FileText,
+            icon: Building2,
+            items: [
+                { title: "Tổng quan", url: "/dashboard/building" },
+                { title: "Hồ sơ & Hợp đồng", url: "/dashboard/building/documents" },
+                { title: "Thiết bị & Bảo trì", url: "/dashboard/building/equipment" },
+                { title: "Khách thuê", url: "/dashboard/building/tenants" },
+                { title: "Báo cáo", url: "/dashboard/building/reports" },
+            ],
         },
         {
             title: "Quản lý tài sản",
@@ -107,14 +125,22 @@ const data = {
                 { title: "Điều chuyển", url: "/dashboard/assets/transfer" },
                 { title: "Bảo trì & Sửa chữa", url: "/dashboard/assets/maintenance" },
                 { title: "Kiểm kê", url: "/dashboard/assets/audit" },
+                { title: "Lịch sử kiểm kê", url: "/dashboard/assets/audit/history" },
+                { title: "Nâng cấp", url: "/dashboard/assets/upgrade" },
                 { title: "Thanh lý", url: "/dashboard/assets/liquidation" },
                 { title: "Tính khấu hao", url: "/dashboard/assets/depreciation" },
+                { title: "Cập nhật hàng loạt", url: "/dashboard/assets/bulk-update" },
             ],
         },
         {
             title: "Báo cáo",
             url: "/dashboard/reports",
             icon: PieChart,
+        },
+        {
+            title: "Theo dõi & Giám sát",
+            url: "/dashboard/assets/tracking",
+            icon: Activity,
         },
     ],
 };

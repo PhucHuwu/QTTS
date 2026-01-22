@@ -8,8 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { FileDown, Download, Search } from "lucide-react";
+import { FileDown, Download, Search, Upload } from "lucide-react";
 import { exportToExcel } from "@/lib/exportUtils";
+import { ImportDialog } from "@/components/import-dialog";
 
 export default function ExportedAssetsPage() {
     const assets = useAppStore((state) => state.assets);
@@ -19,6 +20,7 @@ export default function ExportedAssetsPage() {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [statusFilter, setStatusFilter] = useState("ALL");
+    const [showImportDialog, setShowImportDialog] = useState(false);
 
     // Filter function
     const filteredAssets = exportedAssets.filter((asset) => {
@@ -40,10 +42,23 @@ export default function ExportedAssetsPage() {
         exportToExcel(exportData, `Tai_san_xuat_toan_${new Date().toISOString().slice(0, 10)}`, "Xuất toán");
     };
 
+    const handleImportComplete = (importedData: any[]) => {
+        alert(`Đã import thành công ${importedData.length} tài sản xuất toán`);
+    };
+
     const totalValue = filteredAssets.reduce((sum, a) => sum + a.price, 0);
 
     return (
         <div className="space-y-4">
+            {showImportDialog && (
+                <ImportDialog
+                    open={showImportDialog}
+                    onOpenChange={setShowImportDialog}
+                    title="Import danh sách tài sản xuất kho"
+                    onImportComplete={handleImportComplete}
+                />
+            )}
+
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight flex items-center gap-2">
@@ -52,10 +67,16 @@ export default function ExportedAssetsPage() {
                     </h1>
                     <p className="text-muted-foreground">Theo dõi tài sản đã thanh lý / xuất toán</p>
                 </div>
-                <Button onClick={handleExport} disabled={filteredAssets.length === 0}>
-                    <Download className="mr-2 h-4 w-4" />
-                    Xuất Excel ({filteredAssets.length})
-                </Button>
+                <div className="flex gap-2">
+                    <Button variant="outline" onClick={() => setShowImportDialog(true)}>
+                        <Upload className="mr-2 h-4 w-4" />
+                        Import
+                    </Button>
+                    <Button onClick={handleExport} disabled={filteredAssets.length === 0}>
+                        <Download className="mr-2 h-4 w-4" />
+                        Xuất Excel ({filteredAssets.length})
+                    </Button>
+                </div>
             </div>
 
             <div className="grid gap-4 md:grid-cols-3">
@@ -84,7 +105,7 @@ export default function ExportedAssetsPage() {
                     <CardContent>
                         <div className="text-2xl font-bold">
                             {new Intl.NumberFormat("vi-VN", { notation: "compact", style: "currency", currency: "VND" }).format(
-                                filteredAssets.length > 0 ? totalValue / filteredAssets.length : 0,
+                                filteredAssets.length > 0 ? totalValue / filteredAssets.length : 0
                             )}
                         </div>
                     </CardContent>
