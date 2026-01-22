@@ -70,8 +70,11 @@ const data = {
             icon: BookOpen,
             items: [
                 { title: "Loại tài sản", url: "/dashboard/categories/types" },
-                { title: "Vị trí / Kho", url: "/dashboard/categories/locations" },
-                { title: "Nhà cung cấp", url: "/dashboard/categories/suppliers" },
+                { title: "Danh mục Kho / Vị trí", url: "/dashboard/categories/locations" },
+                { title: "Định mức sử dụng", url: "/dashboard/categories/usage-quotas" },
+                { title: "Trạng thái tài sản", url: "/dashboard/categories/asset-states" },
+                { title: "Đơn vị tính", url: "/dashboard/categories/units" },
+                { title: "Chức danh", url: "/dashboard/categories/positions" },
             ],
         },
         {

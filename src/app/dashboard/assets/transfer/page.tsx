@@ -19,6 +19,8 @@ export default function AssetTransferPage() {
     const locations = useAppStore((state) => state.locations);
     const updateAsset = useAppStore((state) => state.updateAsset);
 
+    const logTransfer = useAppStore((state) => state.logTransfer);
+
     const [selectedAssetIds, setSelectedAssetIds] = useState<string[]>([]);
     const [targetLocation, setTargetLocation] = useState("");
     const [targetManager, setTargetManager] = useState("");
@@ -27,14 +29,33 @@ export default function AssetTransferPage() {
 
     const handleTransfer = () => {
         if (selectedAssetIds.length === 0 || !targetLocation || !targetManager) {
-            alert("Vui lòng chọn tài sản và thông tin điều chuyển đày đủ.");
+            alert("Vui lòng chọn tài sản và thông tin điều chuyển đầy đủ.");
             return;
         }
 
+        const locationName = locations.find((l) => l.id === targetLocation)?.name || targetLocation;
+
         // Update workflow
         selectedAssetIds.forEach((id) => {
+            const asset = assets.find((a) => a.id === id);
+
+            // Log history
+            if (asset) {
+                logTransfer({
+                    id: `tr-${Date.now()}-${id}`,
+                    assetId: id,
+                    fromLocation: asset.location,
+                    toLocation: locationName,
+                    fromManager: asset.managerId,
+                    toManager: targetManager,
+                    date: transferDate,
+                    reason: reason,
+                });
+            }
+
+            // Update asset
             updateAsset(id, {
-                location: locations.find((l) => l.id === targetLocation)?.name || targetLocation,
+                location: locationName,
                 managerId: targetManager,
             });
         });

@@ -26,6 +26,7 @@ const SAMPLE_JSON = `[
 ]`;
 
 export default function ImportPage() {
+    const assets = useAppStore((state) => state.assets);
     const addAsset = useAppStore((state) => state.addAsset);
     const [jsonInput, setJsonInput] = useState(SAMPLE_JSON);
     const [previewData, setPreviewData] = useState<any[]>([]);
@@ -38,6 +39,26 @@ export default function ImportPage() {
                 setError("Dữ liệu phải là một mảng JSON.");
                 return;
             }
+
+            // Validation
+            const existingCodes = new Set(assets.map((a) => a.code));
+            const newCodes = new Set();
+            for (const item of parsed) {
+                if (!item.code || !item.name) {
+                    setError("Dữ liệu thiếu mã hoặc tên tài sản.");
+                    return;
+                }
+                if (existingCodes.has(item.code)) {
+                    setError(`Mã tài sản '${item.code}' đã tồn tại trong hệ thống.`);
+                    return;
+                }
+                if (newCodes.has(item.code)) {
+                    setError(`Mã tài sản '${item.code}' bị trùng lặp trong file nhập.`);
+                    return;
+                }
+                newCodes.add(item.code);
+            }
+
             setPreviewData(parsed);
             setError("");
         } catch (e) {

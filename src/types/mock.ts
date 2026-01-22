@@ -56,3 +56,61 @@ export interface AuditLog {
     timestamp: string;
     details: string;
 }
+
+export interface MaintenanceTicket {
+    id: string;
+    assetId: string;
+    description: string;
+    requestDate: string;
+    completionDate?: string;
+    status: "PENDING" | "COMPLETED";
+    cost?: number;
+}
+
+export interface AuditSession {
+    id: string;
+    code: string;
+    name: string;
+    date: string;
+    status: "PENDING" | "COMPLETED";
+    location: string;
+    notes?: string;
+}
+
+export interface TransferRecord {
+    id: string;
+    assetId: string;
+    fromLocation: string;
+    toLocation: string;
+    fromManager: string;
+    toManager: string;
+    date: string;
+    reason: string;
+}
+
+export interface MasterData {
+    id: string;
+    type: "USAGE_QUOTA" | "ASSET_STATE" | "UNIT" | "POSITION";
+    name: string;
+    code: string;
+    description?: string;
+    active: boolean;
+}
+
+export interface SystemLog {
+    id: string;
+    action: string; // e.g., "LOGIN", "CREATE_ASSET", "UPDATE_PERMISSION"
+    userId: string;
+    userName: string;
+    timestamp: string;
+    details: string;
+    severity: "INFO" | "WARNING" | "ERROR";
+}
+
+export interface Permission {
+    code: string;
+    name: string;
+    module: string;
+}
+
+export type RolePermissions = Record<Role, string[]>;

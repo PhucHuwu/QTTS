@@ -12,29 +12,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
 
-// Mock Audit Sessions
-const MOCK_AUDITS = [
-    { id: "au1", code: "KK-2025-01", name: "Kiểm kê Q1/2025 - Kho A", date: "2025-03-31", status: "PENDING", location: "Kho A" },
-    { id: "au2", code: "KK-2024-12", name: "Kiểm kê cuối năm 2024", date: "2024-12-31", status: "COMPLETED", location: "Toàn bộ" },
-];
+import { useAppStore } from "@/lib/store";
 
 export default function AuditPage() {
-    const [audits, setAudits] = useState(MOCK_AUDITS);
+    const auditSessions = useAppStore((state) => state.auditSessions);
+    const createAuditSession = useAppStore((state) => state.createAuditSession);
     const [isNewOpen, setIsNewOpen] = useState(false);
     const [newAuditName, setNewAuditName] = useState("");
+    const [newAuditLocation, setNewAuditLocation] = useState("Văn phòng Chính"); // Should be selectable
 
     const handleCreate = () => {
-        setAudits([
-            {
-                id: `au${Date.now()}`,
-                code: `KK-${new Date().toISOString().slice(0, 7)}`,
-                name: newAuditName,
-                date: new Date().toISOString().slice(0, 10),
-                status: "PENDING",
-                location: "Văn phòng Chính",
-            },
-            ...audits,
-        ]);
+        if (!newAuditName) return;
+
+        createAuditSession({
+            id: `au-${Date.now()}`,
+            code: `KK-${new Date().toISOString().slice(0, 7)}-${Math.floor(Math.random() * 100)}`,
+            name: newAuditName,
+            date: new Date().toISOString().slice(0, 10),
+            status: "PENDING",
+            location: newAuditLocation,
+        });
+
         setIsNewOpen(false);
         setNewAuditName("");
     };
@@ -42,7 +40,7 @@ export default function AuditPage() {
     const columns: ColumnDef<any>[] = [
         { accessorKey: "code", header: "Mã đợt" },
         { accessorKey: "name", header: "Tên đợt kiểm kê" },
-        { accessorKey: "date", header: "Ngày chốt" },
+        { accessorKey: "date", header: "Ngày tạo" },
         { accessorKey: "location", header: "Phạm vi" },
         {
             accessorKey: "status",
@@ -97,7 +95,7 @@ export default function AuditPage() {
             </div>
 
             <div className="rounded-md border p-4">
-                <DataTable columns={columns} data={audits} />
+                <DataTable columns={columns} data={auditSessions} />
             </div>
         </div>
     );
